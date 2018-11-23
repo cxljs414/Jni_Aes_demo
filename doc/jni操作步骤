@@ -1,0 +1,21 @@
+1.写工具类包含native方法声明
+2、makeproject 生成class文件
+3、进入目录 java/ 在dos中输入 javah com.xstroe.tms.android.utils.JniUtil 生成.h文件
+4、在main目录下创建jni文件夹，将.h文件放进去
+5、在jni文件夹下创建.c文件，实现.h中的方法
+6、添加System.loadLibrary("JniUtil");
+7、将build。。ndk下面的Android.mk文件拷到jni文件夹，在app.gradle中添加
+	defaultConfig中添加：
+		ndk {
+            moduleName "JniUtil"
+            // 设置支持的SO库架构
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64'
+        }
+    在android中添加：
+	sourceSets { main { jni.srcDirs = ['src/main/jni/','src/main/jniLibs/'] } }
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+  然后rebuild
